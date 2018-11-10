@@ -1,0 +1,30 @@
+{
+  "type": "create",
+  "credentials": {
+    "partnerUserID": "TO_BE_REPLACED",
+    "partnerUserSecret": "TO_BE_REPLACED"
+  },
+  "inputSettings": {
+    "type": "expenses",
+    "employeeEmail": "TO_BE_REPLACED",
+    "transactionList": [{
+      "amount": 10,
+      "bank": "",
+      "billable": false,
+      "cardName": "TO_BE_REPLACED - Cash Expense",
+      "cardNumber": "",
+      "category": "Office Lunch (daily office lunch, catering, snacks & related)",
+      "comment": ".",
+      "created": "2018-11-10",
+      "currency": "EUR",
+      "details": "",
+      "externalID": "",
+      "managedCard": false,
+      "merchant": "test",
+      "modified": false,
+      "receiptFilename": "",
+      "receiptState": "OPEN",
+      "reimbursable": true
+    }]
+  }
+}
