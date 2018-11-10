@@ -6,6 +6,8 @@ import clients.SymBotClient;
 import configuration.SymConfig;
 import configuration.SymConfigLoader;
 import expensify.bot.im.IMListenerImpl;
+import expensify.bot.im.RoomListenerImpl;
+import expensify.bot.utils.SymUtils;
 import io.micronaut.context.event.ApplicationEventListener;
 import io.micronaut.discovery.event.ServiceStartedEvent;
 import io.micronaut.scheduling.annotation.Async;
@@ -17,6 +19,7 @@ import services.DatafeedEventsService;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Singleton;
+
 import java.net.URL;
 
 @Singleton
@@ -32,9 +35,8 @@ public class BotService implements ApplicationEventListener<ServiceStartedEvent>
     this.expensifyService = expensifyService;
   }
 
-  @Async
-  @Override
-  public void onApplicationEvent(final ServiceStartedEvent event) {
+  @PostConstruct
+  void init() {
     LOG.info("Authenticate pod against the pod");
     if(!authenticated) {
       authenticate();
@@ -44,18 +46,20 @@ public class BotService implements ApplicationEventListener<ServiceStartedEvent>
 
   private synchronized void authenticate(){
     authenticated = true ;
-    URL url = getClass().getResource("/config.json");
-    SymConfigLoader configLoader = new SymConfigLoader();
-    SymConfig config = configLoader.loadFromFile(url.getPath());
+    SymConfig config = SymUtils.getConfig();
     ISymAuth botAuth = new SymBotRSAAuth(config);
     botAuth.authenticate();
     SymBotClient botClient = SymBotClient.initBot(config, botAuth);
     DatafeedEventsService datafeedEventsService = botClient.getDatafeedEventsService();
-    //RoomListener roomListenerTest = new RoomListenerTestImpl(botClient);
-    //datafeedEventsService.addRoomListener(roomListenerTest);
+    RoomListener roomListenerTest = new RoomListenerImpl(botClient);
+    datafeedEventsService.addRoomListener(roomListenerTest);
     IMListener imListener = new IMListenerImpl(botClient, expensifyService);
     datafeedEventsService.addIMListener(imListener);
 
   }
 
+  @Override
+  public void onApplicationEvent(ServiceStartedEvent serviceStartedEvent) {
+    System.out.println("coucou");
+  }
 }
