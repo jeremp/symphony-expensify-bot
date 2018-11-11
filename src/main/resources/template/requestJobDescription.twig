@@ -1,17 +1,17 @@
 {
   "type": "create",
   "credentials": {
-    "partnerUserID": "TO_BE_REPLACED",
-    "partnerUserSecret": "TO_BE_REPLACED"
+    "partnerUserID": "{{ auth.partnerUserID }}",
+    "partnerUserSecret": "{{ auth.partnerUserSecret }}"
   },
   "inputSettings": {
     "type": "expenses",
-    "employeeEmail": "TO_BE_REPLACED",
+    "employeeEmail": "{{ email }}",
     "transactionList": [{
-      "amount": 10,
+      "amount": {{ amount }},
       "bank": "",
       "billable": false,
-      "cardName": "TO_BE_REPLACED - Cash Expense",
+      "cardName": "{{ email }} - Cash Expense",
       "cardNumber": "",
       "category": "Office Lunch (daily office lunch, catering, snacks & related)",
       "comment": ".",
