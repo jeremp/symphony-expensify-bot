@@ -45,6 +45,7 @@ public class BotService implements ApplicationEventListener<ServiceStartedEvent>
   }
 
   private synchronized void authenticate(){
+    LOG.info("Authenticating the Bot...");
     authenticated = true ;
     SymConfig config = SymUtils.getConfig();
     ISymAuth botAuth = new SymBotRSAAuth(config);
@@ -55,11 +56,10 @@ public class BotService implements ApplicationEventListener<ServiceStartedEvent>
     datafeedEventsService.addRoomListener(roomListenerTest);
     IMListener imListener = new IMListenerImpl(botClient, expensifyService);
     datafeedEventsService.addIMListener(imListener);
-
+    LOG.info("Authenticating the Bot [DONE]");
   }
 
   @Override
   public void onApplicationEvent(ServiceStartedEvent serviceStartedEvent) {
-    System.out.println("coucou");
   }
 }

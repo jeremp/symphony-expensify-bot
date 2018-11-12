@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 public class TextAnalyser {
 
   public static final String ACTION_AUTH = "auth";
+  public static final String ACTION_HELP = "help";
   public static final String ACTION_EXPENSE = "expense";
 
   private static final Pattern AMOUNT_PATTERN = Pattern.compile("[ ]{1}([0-9]){1,2}[\\.\\,]{0,1}([0-9]){0,2}[ ]{0,1}[\\$\\€]");
@@ -21,6 +22,10 @@ public class TextAnalyser {
 
   public boolean isExpenseAction(String message){
     return ACTION_EXPENSE.equals(extractAction(message));
+  }
+
+  public boolean isHelpAction(String message){
+    return ACTION_HELP.equals(extractAction(message));
   }
 
   public List<String> extractAuthTokens(String message){

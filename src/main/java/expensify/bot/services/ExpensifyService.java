@@ -52,6 +52,9 @@ public class ExpensifyService {
         EXPENSIFY_AUTH_MAP.put(message.getUser().getEmail(), new ExpensifyAuth(tokens.get(0), tokens.get(1)));
         return "You are now authenticated on Expensify";
       }
+    } else if (analyser.isHelpAction(message.getMessageText())) {
+      String helpMessage = templateService.getHelpMessage(message.getUser().getEmail());
+      return helpMessage;
     } else if (analyser.isExpenseAction(message.getMessageText())) {
       String email = message.getUser().getEmail();
       String messageText = message.getMessageText();
