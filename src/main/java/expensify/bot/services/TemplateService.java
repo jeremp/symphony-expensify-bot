@@ -15,11 +15,12 @@ public class TemplateService {
 
   private static final Logger LOG = LoggerFactory.getLogger(ExpensifyService.class);
 
-  public String expensePayload(String email, ExpensifyAuth auth, int amount){
+  public String expensePayload(String email, ExpensifyAuth auth, int amount, String merchant){
     JtwigModel model = JtwigModel.newModel()
             .with("email", email)
             .with("auth", auth)
-            .with("amount", amount);
+            .with("amount", amount)
+            .with("merchant", merchant);
 
     return EXP_TEMPLATE.render(model);
   }

@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,14 +26,17 @@ public class ExpensifyService {
 
   private static final Logger LOG = LoggerFactory.getLogger(ExpensifyService.class);
   private static final Map<String, ExpensifyAuth> EXPENSIFY_AUTH_MAP = new HashMap<>();
-  private static final String SORRY = "Sorry, I didn't get what you said.";
-  private static final String NOT_AUTHENTICATED = "Sorry, You are not authenticated yet.";
+  private static final String SORRY = "Sorry, I didn't get what you said";
+  private static final String NOT_AUTHENTICATED = "Sorry, You are not authenticated yet";
+  private static final String NO_AMOUNT = "Sorry, I could not extract any amount of what you just said";
+  private static final String TOO_MANY_AMOUNTS = "Sorry, You last sentense seems to contains multiple amounts";
 
-  private TemplateService templateService ;
+  private TemplateService templateService;
 
   private TextAnalyser analyser = new TextAnalyser();
 
-  @Client("https://integrations.expensify.com/Integration-Server/ExpensifyIntegrations") @Inject
+  @Client("https://integrations.expensify.com/Integration-Server/ExpensifyIntegrations")
+  @Inject
   RxHttpClient httpClient;
 
 
@@ -40,29 +44,40 @@ public class ExpensifyService {
     this.templateService = templateService;
   }
 
-  public String processMessage(InboundMessage message){
-    if(analyser.isAuthAction(message.getMessageText())){
+  public String processMessage(InboundMessage message) {
+    if (analyser.isAuthAction(message.getMessageText())) {
       List<String> tokens = analyser.extractAuthTokens(message.getMessageText());
-      if(tokens.size()==2){
+      if (tokens.size() == 2) {
         LOG.info("User {} just sent his authentication tokens", message.getUser().getEmail());
         EXPENSIFY_AUTH_MAP.put(message.getUser().getEmail(), new ExpensifyAuth(tokens.get(0), tokens.get(1)));
         return "You are now authenticated on Expensify";
       }
-    } else if(analyser.isExpenseAction(message.getMessageText())){
+    } else if (analyser.isExpenseAction(message.getMessageText())) {
       String email = message.getUser().getEmail();
+      String messageText = message.getMessageText();
       ExpensifyAuth auth = EXPENSIFY_AUTH_MAP.get(email);
-      if(auth == null){
+      if (auth == null) {
         return NOT_AUTHENTICATED;
       }
-      postExpense(email, auth, 1500);
-      return "expensed !";
+      List<BigDecimal> amounts = analyser.extractAmount(messageText);
+      if (amounts.isEmpty()) {
+        return NO_AMOUNT;
+      } else if (amounts.size() > 1) {
+        return TOO_MANY_AMOUNTS;
+      } else {
+        int amount = amounts.get(0).multiply(BigDecimal.valueOf(100)).intValue();
+        String merchant = analyser.extractMerchant(messageText);
+
+        postExpense(email, auth, amount, merchant);
+        return "expensed !";
+      }
     }
     return SORRY;
   }
 
 
-  private void postExpense(String email, ExpensifyAuth auth, int amount){
-    String expensePayload = templateService.expensePayload(email, auth, amount);
+  private void postExpense(String email, ExpensifyAuth auth, int amount, String merchant) {
+    String expensePayload = templateService.expensePayload(email, auth, amount, merchant);
 
     MultipartBody requestBody = MultipartBody.builder()
             .addPart(
