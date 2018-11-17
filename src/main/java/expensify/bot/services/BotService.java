@@ -31,6 +31,8 @@ public class BotService implements ApplicationEventListener<ServiceStartedEvent>
 
   private boolean authenticated = false ;
 
+  private SymBotClient botClient ;
+
   public BotService(ExpensifyService expensifyService) {
     this.expensifyService = expensifyService;
   }
@@ -44,13 +46,17 @@ public class BotService implements ApplicationEventListener<ServiceStartedEvent>
     LOG.info("DONE");
   }
 
+  public SymBotClient getBotClient(){
+    return this.botClient;
+  }
+
   private synchronized void authenticate(){
     LOG.info("Authenticating the Bot...");
     authenticated = true ;
     SymConfig config = SymUtils.getConfig();
     ISymAuth botAuth = new SymBotRSAAuth(config);
     botAuth.authenticate();
-    SymBotClient botClient = SymBotClient.initBot(config, botAuth);
+    botClient = SymBotClient.initBot(config, botAuth);
     DatafeedEventsService datafeedEventsService = botClient.getDatafeedEventsService();
     RoomListener roomListenerTest = new RoomListenerImpl(botClient);
     datafeedEventsService.addRoomListener(roomListenerTest);
@@ -61,5 +67,6 @@ public class BotService implements ApplicationEventListener<ServiceStartedEvent>
 
   @Override
   public void onApplicationEvent(ServiceStartedEvent serviceStartedEvent) {
+    // removing this method prevents the post construct to be called....
   }
 }

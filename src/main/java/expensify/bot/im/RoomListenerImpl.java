@@ -52,9 +52,10 @@ public class RoomListenerImpl implements RoomListener {
   public void onUserJoinedRoom(UserJoinedRoom userJoinedRoom) {
     OutboundMessage messageOut = new OutboundMessage();
     if(userJoinedRoom.getAffectedUser().getUsername().equals(this.botUsername)){
-      messageOut.setMessage("Hi All, I should only be added to IM, not ROOMs.");
+      messageOut.setMessage("Hi All, I should only be added to IM, not ROOMs. Bye.");
       try {
         this.botClient.getMessagesClient().sendMessage(userJoinedRoom.getStream().getStreamId(), messageOut);
+        this.botClient.getStreamsClient().removeMemberFromRoom(userJoinedRoom.getStream().getStreamId(), userJoinedRoom.getAffectedUser().getUserId());
       } catch (Exception e) {
         logger.error("failed to post message in a room", e);
       }

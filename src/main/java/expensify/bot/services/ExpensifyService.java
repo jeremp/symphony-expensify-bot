@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,10 @@ import java.util.Map;
 public class ExpensifyService {
 
   private static final Logger LOG = LoggerFactory.getLogger(ExpensifyService.class);
+
   private static final Map<String, ExpensifyAuth> EXPENSIFY_AUTH_MAP = new HashMap<>();
+  private static final Map<Long, String> ACTIVE_USERS_MAP = new HashMap<>();
+
   private static final String SORRY = "Sorry, I didn't get what you said";
   private static final String NOT_AUTHENTICATED = "Sorry, You are not authenticated yet";
   private static final String NO_AMOUNT = "Sorry, I could not extract any amount of what you just said";
@@ -50,6 +54,7 @@ public class ExpensifyService {
       if (tokens.size() == 2) {
         LOG.info("User {} just sent his authentication tokens", message.getUser().getEmail());
         EXPENSIFY_AUTH_MAP.put(message.getUser().getEmail(), new ExpensifyAuth(tokens.get(0), tokens.get(1)));
+        ACTIVE_USERS_MAP.put(message.getUser().getUserId(), message.getUser().getEmail());
         return "You are now authenticated on Expensify";
       }
     } else if (analyser.isHelpAction(message.getMessageText())) {
@@ -80,7 +85,7 @@ public class ExpensifyService {
 
 
   private void postExpense(String email, ExpensifyAuth auth, int amount, String merchant) {
-    String expensePayload = templateService.expensePayload(email, auth, amount, merchant);
+    String expensePayload = templateService.expensePayload(email, auth, amount, merchant, new Date());
 
     MultipartBody requestBody = MultipartBody.builder()
             .addPart(
@@ -96,6 +101,14 @@ public class ExpensifyService {
     );
     HttpResponse<String> response = call.blockingFirst();
     LOG.info("Expensify returned {} : \n{}", response.code(), response.body());
+  }
+
+
+  /**
+   * Return all authenticated users emails
+   */
+  public Map<Long, String> getActiveUsers(){
+    return ACTIVE_USERS_MAP;
   }
 
 }
