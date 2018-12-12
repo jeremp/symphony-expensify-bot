@@ -14,6 +14,7 @@ import io.micronaut.http.client.multipart.MultipartBody;
 import io.reactivex.Flowable;
 import model.InboundMessage;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -31,11 +32,12 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -160,9 +162,24 @@ public class ExpensifyService {
     final String expenseDownloadPayload = templateService.downloadExpenseListPayload(auth, reportName);
     String reportString = getReport(expenseDownloadPayload);
 
-    // parse response
+    return parseExpenseReport(reportString);
+  }
 
-    return Collections.EMPTY_LIST;
+  /**
+   * This method is reponsible for parse the expense Report to return a List of {@link ExpenseDto}.
+   */
+  private List<ExpenseDto> parseExpenseReport(String reportString) {
+
+    List<ExpenseDto> result = new ArrayList<>();
+
+    if (StringUtils.isNotEmpty(reportString)) {
+      Scanner scanner = new Scanner(reportString);
+      while (scanner.hasNextLine()) {
+        String expenseLine = scanner.nextLine();
+
+      }
+    }
+     return result;
   }
 
   /**
