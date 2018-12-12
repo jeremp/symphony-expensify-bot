@@ -18,6 +18,7 @@ public class TemplateService {
 
   private static final JtwigTemplate EXP_TEMPLATE = JtwigTemplate.classpathTemplate("template/requestJobDescription.twig");
   private static final JtwigTemplate EXP_LIST_EXPENSE_TEMPLATE = JtwigTemplate.classpathTemplate("template/requestListExpenses.twig");
+  private static final JtwigTemplate EXP_LIST_EXPENSE_CSV_TEMPLATE = JtwigTemplate.classpathTemplate("template/requestListExpensesTemplate.twig");
   private static final JtwigTemplate EXP_LIST_EXPENSE_DOWNLOAD_TEMPLATE = JtwigTemplate.classpathTemplate("template/requestListExpensesDownload.twig");
   private static final JtwigTemplate HELP_TEMPLATE = JtwigTemplate.classpathTemplate("template/msg_help.twig");
   private static final JtwigTemplate DAILY_REMINDER_TEMPLATE = JtwigTemplate.classpathTemplate("template/daily_reminder.twig");
@@ -62,6 +63,10 @@ public class TemplateService {
         .with("limit", limit);
 
     return EXP_LIST_EXPENSE_TEMPLATE.render(model);
+  }
+
+  public String getExpenseListTemplate(){
+    return EXP_LIST_EXPENSE_TEMPLATE.render(new JtwigModel());
   }
 
   public String downloadExpenseListPayload(ExpensifyAuth auth, String filename){
