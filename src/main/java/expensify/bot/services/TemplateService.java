@@ -66,7 +66,7 @@ public class TemplateService {
   }
 
   public String getExpenseListTemplate(){
-    return EXP_LIST_EXPENSE_TEMPLATE.render(new JtwigModel());
+    return EXP_LIST_EXPENSE_CSV_TEMPLATE.render(new JtwigModel());
   }
 
   public String downloadExpenseListPayload(ExpensifyAuth auth, String filename){

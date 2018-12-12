@@ -109,6 +109,7 @@ public class ExpensifyService {
       ExpensifyAuth auth = EXPENSIFY_AUTH_MAP.get(email);
       try {
         List<ExpenseDto> expenseList = listExpenses(auth);
+        LOG.info("Expense list size : {}", expenseList.size());
       } catch (IOException e) {
         e.printStackTrace();
       }
@@ -238,10 +239,13 @@ public class ExpensifyService {
       throw new RuntimeException("The expense download report action failed, please contact the Expense Bot Admin");
     }
 
-    InputStream csvStream = downloadResponse.getEntity().getContent();
     ByteArrayOutputStream csvBos = new ByteArrayOutputStream();
-    IOUtils.copy(csvStream, csvBos);
-    return new String(csvBos.toByteArray());
+    downloadResponse.getEntity().writeTo(csvBos);
+
+    //IOUtils.copy(csvStream, csvBos);
+    String result = new String(csvBos.toByteArray());
+    LOG.info("CSV = {}", result);
+    return result ;
   }
 
 }
