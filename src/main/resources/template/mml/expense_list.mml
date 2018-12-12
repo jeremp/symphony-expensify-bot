@@ -1,0 +1,47 @@
+<messageML>
+
+  <table>
+
+    <thead>
+
+      <tr>
+
+        <td>Merchant</td>
+
+        <td>Amount</td>
+
+        <td>Date</td>
+
+        <td>#Expense</td>
+
+        <td>#Report</td>
+
+      </tr>
+
+    </thead>
+
+    <tbody>
+      <#list (entity.data) as expense>
+
+      <tr>
+
+        <td>${expense.merchant}</td>
+
+        <td>${expense.amount} ${expense.currency}</td>
+
+        <td>${expense.created}</td>
+
+        <td>${expense.reportNumber}</td>
+
+        <td>${expense.expenseNumber}</td>
+
+      </tr>
+
+        </#list>
+
+
+    </tbody>
+
+  </table>
+
+</messageML>

@@ -17,6 +17,8 @@ import java.util.Date;
 public class TemplateService {
 
   private static final JtwigTemplate EXP_TEMPLATE = JtwigTemplate.classpathTemplate("template/requestJobDescription.twig");
+  private static final JtwigTemplate EXP_LIST_EXPENSE_TEMPLATE = JtwigTemplate.classpathTemplate("template/requestListExpenses.twig");
+  private static final JtwigTemplate EXP_LIST_EXPENSE_DOWNLOAD_TEMPLATE = JtwigTemplate.classpathTemplate("template/requestListExpensesDownload.twig");
   private static final JtwigTemplate HELP_TEMPLATE = JtwigTemplate.classpathTemplate("template/msg_help.twig");
   private static final JtwigTemplate DAILY_REMINDER_TEMPLATE = JtwigTemplate.classpathTemplate("template/daily_reminder.twig");
 
@@ -32,7 +34,6 @@ public class TemplateService {
             .with("merchant", merchant)
             .with("expenseDate", formatDate(date));
 
-
     return EXP_TEMPLATE.render(model);
   }
 
@@ -46,13 +47,30 @@ public class TemplateService {
     return DAILY_REMINDER_TEMPLATE.render(model);
   }
 
-  public String formatDate(Date date){
+  private String formatDate(Date date){
     LocalDate localDate = Instant.ofEpochMilli(date.getTime())
             .atZone(ZoneId.systemDefault())
             .toLocalDate();
 
     return DATE_TIME_FORMATTER.format(localDate);
-
   }
+
+  public String getExpenseListPayload(ExpensifyAuth auth, int limit, Date date){
+    JtwigModel model = JtwigModel.newModel()
+        .with("auth", auth)
+        .with("startDate", formatDate(date))
+        .with("limit", limit);
+
+    return EXP_LIST_EXPENSE_TEMPLATE.render(model);
+  }
+
+  public String downloadExpenseListPayload(ExpensifyAuth auth, String filename){
+    JtwigModel model = JtwigModel.newModel()
+        .with("auth", auth)
+        .with("filename", filename);
+
+    return EXP_LIST_EXPENSE_DOWNLOAD_TEMPLATE.render(model);
+  }
+
 
 }
