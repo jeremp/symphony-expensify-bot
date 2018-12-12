@@ -1,5 +1,5 @@
 <#if addHeader == true>
-    Merchant,Original Amount,Currency,Date,Category,Report number,Expense number<#lt>
+    Merchant,Original Amount,Currency,Date,Report number,Expense number<#lt>
 </#if>
 <#assign reportNumber = 1>
 <#assign expenseNumber = 1>
@@ -10,7 +10,6 @@
         ${expense.amount},<#t>
         ${expense.currency},<#t>
         ${expense.created},<#t>
-        ${expense.category},<#t>
         ${reportNumber},<#t>
         ${expenseNumber}<#lt>
         <#assign expenseNumber = expenseNumber + 1>

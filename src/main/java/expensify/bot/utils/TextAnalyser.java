@@ -13,8 +13,11 @@ public class TextAnalyser {
   public static final String ACTION_AUTH = "auth";
   public static final String ACTION_HELP = "help";
   public static final String ACTION_EXPENSE = "expense";
+  private static final String ACTION_LIST_EXPENSE = "list";
 
   private static final Pattern AMOUNT_PATTERN = Pattern.compile("[ ]{1}([0-9]){1,2}[\\.\\,]{0,1}([0-9]){0,2}[ ]{0,1}[\\$\\€]");
+
+
 
   public boolean isAuthAction(String message){
     return ACTION_AUTH.equals(extractAction(message));
@@ -22,6 +25,15 @@ public class TextAnalyser {
 
   public boolean isExpenseAction(String message){
     return ACTION_EXPENSE.equals(extractAction(message));
+  }
+
+  /**
+   * List all first 10 expenses for the user that talks with the bot with a time period defined by the user.
+   * @param message
+   * @return
+   */
+  public boolean isExpenseListAction(final String message) {
+    return ACTION_LIST_EXPENSE.equals(extractAction(message));
   }
 
   public boolean isHelpAction(String message){

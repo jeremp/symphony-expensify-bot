@@ -19,7 +19,7 @@
     "proxyPassword": "",
     "authTokenRefreshPeriod": "30",
     "truststorePath": "/Users/jeremy.passeron/code/expensify-bot/mnbot/expensify-bot/src/main/resources/all_symphony_certs_truststore",
-    "truststorePassword": "changeit", 
+    "truststorePassword": "changeit",
     "botPrivateKeyPath": "/Users/jeremy.passeron/code/expensify-bot/mnbot/expensify-bot/src/main/resources/",
     "botPrivateKeyName": "rsa-private-example.pem",
     "botUsername": "expensify"
