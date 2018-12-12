@@ -111,4 +111,9 @@ public class ExpensifyService {
     return ACTIVE_USERS_MAP;
   }
 
+
+  private String listExpenses(){
+    return "";
+  }
+
 }

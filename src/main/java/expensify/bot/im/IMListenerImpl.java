@@ -6,6 +6,7 @@ import listeners.IMListener;
 import model.InboundMessage;
 import model.OutboundMessage;
 import model.Stream;
+import org.apache.commons.lang3.StringUtils;
 
 public class IMListenerImpl implements IMListener {
 
@@ -20,11 +21,14 @@ public class IMListenerImpl implements IMListener {
   public void onIMMessage(InboundMessage inboundMessage) {
     OutboundMessage messageOut = new OutboundMessage();
     String response = expensifyService.processMessage(inboundMessage);
-    messageOut.setMessage(response);
+    if(response != null && StringUtils.isNotBlank(response)) {
+      messageOut.setMessage(response);
+
     try {
       this.botClient.getMessagesClient().sendMessage(inboundMessage.getStream().getStreamId(), messageOut);
     } catch (Exception e) {
       e.printStackTrace();
+    }
     }
   }
 

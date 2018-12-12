@@ -18,7 +18,7 @@ public class ExpenseReminderJob {
     this.reminderService = reminderService;
   }
 
-  @Scheduled(fixedDelay = "20s", initialDelay = "30s")
+  @Scheduled(fixedDelay = "850s", initialDelay = "30s")
   public void remindUsersForExpenses(){
     LOG.info("remindUsersForExpenses ...");
     reminderService.remindActiveUsers();
