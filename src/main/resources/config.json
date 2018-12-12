@@ -18,9 +18,9 @@
     "proxyUsername": "",
     "proxyPassword": "",
     "authTokenRefreshPeriod": "30",
-    "truststorePath": "/Users/darlys.maldonado/SymphonySourceCode/fork/symphony-expensify-bot/src/main/resources/all_symphony_certs_truststore",
-    "truststorePassword": "changeit", 
-    "botPrivateKeyPath": "/Users/darlys.maldonado/SymphonySourceCode/fork/symphony-expensify-bot/src/main/resources/",
+    "truststorePath": "/Users/jeremy.passeron/code/expensify-bot/mnbot/expensify-bot/src/main/resources/all_symphony_certs_truststore",
+    "truststorePassword": "changeit",
+    "botPrivateKeyPath": "/Users/jeremy.passeron/code/expensify-bot/mnbot/expensify-bot/src/main/resources/",
     "botPrivateKeyName": "rsa-private-example.pem",
     "botUsername": "expensify"
 }

@@ -22,8 +22,15 @@ public class IMListenerImpl implements IMListener {
     OutboundMessage messageOut = new OutboundMessage();
     String response = expensifyService.processMessage(inboundMessage);
     if(response != null && StringUtils.isNotBlank(response)) {
-      messageOut.setMessage(response);
-
+      if(response.lastIndexOf("_DATA_")==-1) {
+        messageOut.setMessage(response);
+      }else{
+        int dataIndex = response.lastIndexOf("_DATA_");
+        String data = "{ \"data\":" + response.substring(dataIndex+6) +"}";
+        String messageMl = response.substring(0, dataIndex);
+        messageOut.setMessage(messageMl);
+        messageOut.setData(data);
+      }
     try {
       this.botClient.getMessagesClient().sendMessage(inboundMessage.getStream().getStreamId(), messageOut);
     } catch (Exception e) {

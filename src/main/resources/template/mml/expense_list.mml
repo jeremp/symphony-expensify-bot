@@ -1,4 +1,4 @@
-<messageML>
+
 
   <table>
 
@@ -12,9 +12,9 @@
 
         <td>Date</td>
 
-        <td>#Expense</td>
-
         <td>#Report</td>
+
+        <td>#Expense</td>
 
       </tr>
 
@@ -44,4 +44,4 @@
 
   </table>
 
-</messageML>
+

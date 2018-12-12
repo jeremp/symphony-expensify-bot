@@ -22,6 +22,8 @@ public class TemplateService {
   private static final JtwigTemplate EXP_LIST_EXPENSE_DOWNLOAD_TEMPLATE = JtwigTemplate.classpathTemplate("template/requestListExpensesDownload.twig");
   private static final JtwigTemplate HELP_TEMPLATE = JtwigTemplate.classpathTemplate("template/msg_help.twig");
   private static final JtwigTemplate DAILY_REMINDER_TEMPLATE = JtwigTemplate.classpathTemplate("template/daily_reminder.twig");
+  private static final JtwigTemplate MML_LIST_EXP = JtwigTemplate.classpathTemplate("template/mml/expense_list.mml");
+
 
   private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -67,6 +69,10 @@ public class TemplateService {
 
   public String getExpenseListTemplate(){
     return EXP_LIST_EXPENSE_CSV_TEMPLATE.render(new JtwigModel());
+  }
+
+  public String getlistMMLV2(){
+    return MML_LIST_EXP.render(new JtwigModel());
   }
 
   public String downloadExpenseListPayload(ExpensifyAuth auth, String filename){

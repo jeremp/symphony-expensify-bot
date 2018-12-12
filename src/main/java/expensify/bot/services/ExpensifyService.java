@@ -1,5 +1,6 @@
 package expensify.bot.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import expensify.bot.domain.ExpenseDto;
 import expensify.bot.utils.ExpensifyAuth;
 import expensify.bot.utils.TextAnalyser;
@@ -47,6 +48,7 @@ import javax.inject.Singleton;
 public class ExpensifyService {
 
   private static final Logger LOG = LoggerFactory.getLogger(ExpensifyService.class);
+  private static final ObjectMapper MAPPER = new ObjectMapper();
 
   private static final Map<String, ExpensifyAuth> EXPENSIFY_AUTH_MAP = new HashMap<>();
   private static final Map<Long, String> ACTIVE_USERS_MAP = new HashMap<>();
@@ -110,13 +112,21 @@ public class ExpensifyService {
       ExpensifyAuth auth = EXPENSIFY_AUTH_MAP.get(email);
       try {
         List<ExpenseDto> expenseList = listExpenses(auth);
+
         LOG.info("Expense list size : {}", expenseList.size());
+
+        String jsonData = MAPPER.writeValueAsString(expenseList);
+        String mml = templateService.getlistMMLV2();
+
+        //so ugly
+        return mml + "_DATA_" + jsonData;
+
       } catch (IOException e) {
-        // throws an exception
+        LOG.error("error parsing the expenses", e);
       }
 
     }
-    return SORRY;
+    return null;
   }
 
 
@@ -182,17 +192,16 @@ public class ExpensifyService {
         expenseLine = scanner.nextLine();
         String[] expenseColumns = expenseLine.split(",");
 
-        Arrays.stream(expenseColumns).forEach(curretnExpense -> {
+
           String merchant = expenseColumns[0];
-          Double amount = Double.valueOf(expenseColumns[1]);
+          Double amount = Double.valueOf(expenseColumns[1])/100;
           String currency = expenseColumns[2];
           String created = expenseColumns[3];
           String reportNumber = expenseColumns[4];
           String expenseNumber = expenseColumns[5];
 
-          ExpenseDto expenseDto = new ExpenseDto(merchant, amount, currency, created, reportNumber, expenseNumber);
+          ExpenseDto expenseDto = new ExpenseDto(merchant, amount, currency, reportNumber, expenseNumber, created);
           result.add(expenseDto);
-        });
       }
     }
      return result;
