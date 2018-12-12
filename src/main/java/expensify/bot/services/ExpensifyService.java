@@ -174,8 +174,9 @@ public class ExpensifyService {
 
     if (StringUtils.isNotEmpty(reportString)) {
       Scanner scanner = new Scanner(reportString);
+      String expenseLine = scanner.nextLine(); // skip
       while (scanner.hasNextLine()) {
-        String expenseLine = scanner.nextLine();
+        expenseLine = scanner.nextLine();
 
       }
     }
