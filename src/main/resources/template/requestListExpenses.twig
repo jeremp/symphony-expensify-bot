@@ -1,0 +1,21 @@
+{
+    "type":"file",
+     "credentials":{
+        "partnerUserID": "{{ auth.partnerUserID }}",
+        "partnerUserSecret": "{{ auth.partnerUserSecret }}"
+    },
+    "onReceive":{
+        "immediateResponse":["returnRandomFileName"]
+    },
+    "inputSettings":{
+        "type":"combinedReportData",
+        "filters":{
+            "startDate":"{{ startDate }}"
+        },
+        "reportState":"OPEN,SUBMITTED,APPROVED",
+        "limit":"{{ limit }}"
+    },
+    "outputSettings":{
+        "fileExtension":"csv"
+    }
+}
