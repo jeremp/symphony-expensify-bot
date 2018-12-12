@@ -33,6 +33,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -111,7 +112,7 @@ public class ExpensifyService {
         List<ExpenseDto> expenseList = listExpenses(auth);
         LOG.info("Expense list size : {}", expenseList.size());
       } catch (IOException e) {
-        e.printStackTrace();
+        // throws an exception
       }
 
     }
@@ -175,10 +176,23 @@ public class ExpensifyService {
 
     if (StringUtils.isNotEmpty(reportString)) {
       Scanner scanner = new Scanner(reportString);
-      String expenseLine = scanner.nextLine(); // skip
+      String expenseLine = scanner.nextLine(); // skip first line with columns names
+
       while (scanner.hasNextLine()) {
         expenseLine = scanner.nextLine();
+        String[] expenseColumns = expenseLine.split(",");
 
+        Arrays.stream(expenseColumns).forEach(curretnExpense -> {
+          String merchant = expenseColumns[0];
+          Double amount = Double.valueOf(expenseColumns[1]);
+          String currency = expenseColumns[2];
+          String created = expenseColumns[3];
+          String reportNumber = expenseColumns[4];
+          String expenseNumber = expenseColumns[5];
+
+          ExpenseDto expenseDto = new ExpenseDto(merchant, amount, currency, created, reportNumber, expenseNumber);
+          result.add(expenseDto);
+        });
       }
     }
      return result;
