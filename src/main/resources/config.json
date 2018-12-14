@@ -20,7 +20,7 @@
     "authTokenRefreshPeriod": "30",
     "truststorePath": "/Users/jeremy.passeron/code/expensify-bot/mnbot/expensify-bot/src/main/resources/all_symphony_certs_truststore",
     "truststorePassword": "changeit",
-    "botPrivateKeyPath": "/Users/jeremy.passeron/code/expensify-bot/mnbot/expensify-bot/src/main/resources/",
-    "botPrivateKeyName": "rsa-private-example.pem",
+    "botPrivateKeyPath": "THE_DIRECTORY_WHERE_THE_PRIVATE_KEY_IS",
+    "botPrivateKeyName": "THE_PRIVATE_KEY_FILE",
     "botUsername": "expensify"
 }
